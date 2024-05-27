@@ -1,7 +1,7 @@
-from typing import Any
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from .models import ToDoItem
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(label='', widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email'}))
@@ -31,6 +31,13 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'	
 
+
+class AddItemForm(forms.ModelForm):
+    title = forms.CharField(required=True , widget= forms.TextInput(attrs={"placeholder":"Title", "class":"form-control"}), label="")
+    description =  forms.CharField(required=True , widget= forms.Textarea(attrs={"placeholder":"Description", "class":"form-control"}), label="")
+    due_date = forms.DateField(required=True , widget=forms.DateInput(attrs={"placeholder":"Due Date" , "class" :"form-control", "type": "date"}))
         
-    
+    class Meta:
+      model = ToDoItem
+      exclude = ("user",)
     

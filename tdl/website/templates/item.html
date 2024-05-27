@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header"><strong>
+          {{ tdItem.title }} </strong>
+    </div>
+    <div class="card-body">
+  
+  
+  
+  <p class="card-text">
+  <strong>Title: </strong>{{ tdItem.title }}</p>
+  
+  <p class="card-text">
+  <strong>Description: </strong>{{ item.description }}
+  </p>
+  
+  <p class="card-text">
+  <strong>Created at: </strong>{{ tdItem.created_at }}</p>
+  
+  <p class="card-text">
+  <strong>Due Date: </strong>{{ tdItem.due_date }}</p>
+  
+  <p class="card-text">
+  <strong>Status: </strong>
+  {% if  tdItem.complete  %}
+    completed
+    {% else %}
+    In Progress
+  {% endif %}
+</p>      
+    </div>
+  </div>
+  
+  <br/><br/>
+  <a href="{% url 'update_item' tdItem.id %}" class="btn btn-primary">Update</a>
+  
+  <a href="{% url 'delete_item' tdItem.id %}" class="btn btn-danger">Delete</a>
+  
+  <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+          
+  
+    
+{% endblock content %}
+
+
+    

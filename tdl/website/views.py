@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import ToDoItem
 
-from website.forms import SignUpForm
+from website.forms import SignUpForm, AddItemForm
 # Create your views here.
 
 def home(request):
@@ -51,8 +51,48 @@ def register(request):
     
     return render(request, 'register.html', {'form':form})
 
-            
-            
-            
+def toDoItem(request, pk):
+    if request.user.is_authenticated:
+     # look up record   
+            tdItem = ToDoItem.objects.get(id=pk)
+            return render(request, 'item.html', {'tdItem': tdItem})
+    else:
+        messages.error(request, "you must be logged In!")
+        return redirect('home')
+    
+def delete_item(request,pk):
+    if request.user.is_authenticated:
+     # look up record   
+            tdItem = ToDoItem.objects.get(id=pk)
+            tdItem.delete()
+            #messages.success('Item was deleted')
+            return redirect('home')
+    else:
+        #messages.error(request, "you must be logged In!")
+        return redirect('home')
+    
+def add_item(request):
+    form = AddItemForm(request.POST or None)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                return redirect('home')
+        return render(request, "add_item.html", {'form':form})
+    else:
+        return redirect('home')
+    
+def update_item(request,pk):
+    if request.user.is_authenticated:
+        current_item = ToDoItem.objects.get(id=pk)
+        form = AddItemForm(request.POST or None, instance=current_item)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request, "update_item.html", {'form':form})
+    else:
+        return redirect('home')
+
+        
         
 
